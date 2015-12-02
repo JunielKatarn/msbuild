@@ -6,7 +6,7 @@ def project = GithubProject
 
 // Generate the builds for branches: xplat, master and PRs (which aren't branch specific)
 ['*/master', '*/xplat', 'pr'].each { branch ->
-    ['Windows_NT', 'OSX'].each {osName ->
+    ['Windows_NT', 'OSX', 'Ubuntu'].each {osName ->
         def isPR = false
         def newJobName = ''
 
@@ -35,14 +35,14 @@ def project = GithubProject
             case 'OSX':
                 myJob.with{
                     steps{
-                        shell("./cibuild.sh --os Darwin --scope Compile --system-msbuild-path ~/mono-msbuild/old/bin/Unix/Debug-MONO/MSBuild.exe")
+                        shell("./cibuild.sh --scope Compile")
                     }
                 }
                 break;
             case 'Ubuntu':
                 myJob.with{
                     steps{
-                        shell("./cibuild.sh --os Linux --scope Compile --system-msbuild-path ~/mono-msbuild/old/bin/Unix/Debug-MONO/MSBuild.exe")
+                        shell("./cibuild.sh --scope Compile")
                     }
                 }
                 break;
