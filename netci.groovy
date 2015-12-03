@@ -12,7 +12,7 @@ def project = GithubProject
 
         if (branch == 'pr') {
             isPR = true
-            newJobName = Utilities.getFullJobName(project, '_${osName}', isPR)
+            newJobName = Utilities.getFullJobName(project, "_${osName}", isPR)
         } else {
             newJobName = Utilities.getFullJobName(project, "innerloop_${branch.substring(2)}_${osName}", isPR)
         }
@@ -26,21 +26,21 @@ def project = GithubProject
         // Define job.
         switch(osName) {
             case 'Windows_NT':
-                myJob.with{
+                newJob.with{
                     steps{
                         batchFile("call \"C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\vcvarsall.bat\" && RebuildWithLocalMSBuild.cmd")
                     }
                 }
                 break;
             case 'OSX':
-                myJob.with{
+                newJob.with{
                     steps{
                         shell("./cibuild.sh --scope Compile")
                     }
                 }
                 break;
             case 'Ubuntu':
-                myJob.with{
+                newJob.with{
                     steps{
                         shell("./cibuild.sh --scope Compile")
                     }
@@ -56,7 +56,7 @@ def project = GithubProject
         Utilities.addArchival(newJob, 'msbuild.log')
         // Add trigger
         if (isPR) {
-            Utilities.addGithubPRTrigger(newJob, '${osName} Build')
+            Utilities.addGithubPRTrigger(newJob, "${osName} Build")
         } else {
             Utilities.addGithubPushTrigger(newJob)
         }
